@@ -6,40 +6,171 @@
     <title>First High Chart</title>
     <meta name="description" content="Simple High Chart Testing" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://rawgit.com/mholt/PapaParse/master/papaparse.js"></script>
   </head>
 
   <body>
     <div id="container" style="width:100%; height:400px;"></div>
+    <div id="container5" style="width:100%; height:400px;"></div>
 
-    <script src="./js/highcharts.js"></script>
+    <pre id="csv" style="display:none">
+month,income,Expenditure
+january,50000,40000
+february,60000,35000
+march,40000,35000
+april,70000,50000
+may,45000,60000</pre
+    >
     <script type="text/javascript" src="./js/themes/avocado.js"></script>
+    <script src="https://rawgit.com/mholt/PapaParse/master/papaparse.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
+        var csv = Papa.parse(document.getElementById("csv").innerHTML);
         var myChart = Highcharts.chart("container", {
           chart: {
             type: "column"
           },
           title: {
-            text: "Fruit Consumption"
+            text: "Monthly Income and Expenditure"
+          },
+          subtitle: {
+            text: "Myself"
           },
           xAxis: {
-            categories: ["Apples", "Bananas", "Oranges"]
+            categories: ["Jan", "Feb"],
+
+            title: {
+              text: "Months"
+            }
           },
           yAxis: {
+            min: 0,
             title: {
-              text: "Fruit eaten"
+              text: "Amount (Rs)"
+            }
+          },
+          tooltip: {
+            headerFormat:
+              '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat:
+              '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: "</table>",
+            shared: true,
+            useHTML: true
+          },
+          plotOptions: {
+            series: {
+              dataLabels: {
+                enabled: true,
+                format: "{point.name}"
+              }
+            },
+            column: {
+              pointPadding: 0.2,
+              borderWidth: 0
             }
           },
           series: [
             {
-              name: "Jane",
-              data: [1, 0, 4]
+              name: "Income",
+              colorByPoint: true,
+
+              data: [
+                {
+                  name: "Jan Income",
+                  y: 50000,
+                  drilldown: "Jan Income"
+                },
+                {
+                  name: "Feb Income",
+                  y: 60000,
+                  drilldown: "Feb Income"
+                }
+              ]
             },
             {
-              name: "John",
-              data: [5, 7, 3]
+              name: "Expenditure",
+
+              data: [
+                {
+                  name: "Jan Expenditure",
+                  y: 40000,
+                  drilldown: "Jan Expenditure"
+                },
+                {
+                  name: "Feb Expenditure",
+                  y: 35000,
+                  drilldown: "Feb Expenditure"
+                }
+              ]
             }
-          ]
+          ],
+          drilldown: {
+            series: [
+              {
+                name: "Jan Income",
+                id: "Jan Income",
+                data: [["salary", 40000], ["Business", 10000]]
+              },
+              {
+                name: "Feb Income",
+                id: "Feb Income",
+                data: [["salary", 40000], ["Business", 20000]]
+              },
+              {
+                name: "Jan Expenditure",
+                id: "Jan Expenditure",
+                data: [["Household", 30000], ["Vehicle Repair", 10000]]
+              },
+              {
+                name: "Feb Expenditure",
+                id: "Feb Expenditure",
+                data: [["Household", 20000], ["Jewel", 10000]]
+              }
+            ]
+          }
+        });
+        var myChart = Highcharts.chart("container5", {
+          chart: {
+            type: "line"
+          },
+          title: {
+            text: "Year Income and Expenditure"
+          },
+          subtitle: {
+            text: "Myself"
+          },
+          xAxis: {
+            categories: ["Jan", "Feb"],
+
+            title: {
+              text: "Months"
+            }
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: "Amount (Rs)"
+            }
+          },
+          tooltip: {
+            headerFormat:
+              '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat:
+              '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: "</table>",
+            shared: true,
+            useHTML: true
+          },
+          data: {
+            rows: csv.data
+          }
         });
       });
     </script>
