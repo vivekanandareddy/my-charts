@@ -14,8 +14,8 @@
   </head>
 
   <body>
-    <div id="container" style="width:100%; height:400px;"></div>
     <div id="container5" style="width:100%; height:400px;"></div>
+    <div id="container" style="width:100%; height:400px;"></div>
 
     <pre id="csv" style="display:none">
 month,income,Expenditure
@@ -30,9 +30,48 @@ may,45000,60000</pre
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         var csv = Papa.parse(document.getElementById("csv").innerHTML);
+        var myChart2 = Highcharts.chart("container5", {
+          chart: {
+            type: "column"
+          },
+          title: {
+            text: "Year Income and Expenditure"
+          },
+          subtitle: {
+            text: "Myself"
+          },
+          xAxis: {
+            title: {
+              text: "Months"
+            }
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: "Amount (Rs)"
+            }
+          },
+          tooltip: {
+            headerFormat:
+              '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat:
+              '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+            footerFormat: "</table>",
+            shared: true,
+            useHTML: true
+          },
+          data: {
+            rows: csv.data
+          }
+        });
+
         var myChart1 = Highcharts.chart("container", {
           chart: {
             type: "column"
+          },
+          events: {
+            drilldown: function(e) {}
           },
           title: {
             text: "Monthly Income and Expenditure"
@@ -112,11 +151,16 @@ may,45000,60000</pre
             }
           ],
           drilldown: {
+            activeAxisLabelStyle: {
+              textDecoration: "none",
+              color: "grey"
+            },
             series: [
               {
                 name: "Jan Income",
                 id: "Jan Income",
-                data: [["salary", 40000], ["Business", 10000]]
+                data: [["salary", 40000], ["Business", 10000]],
+                enabledLabels: false
               },
               {
                 name: "Feb Income",
@@ -134,41 +178,6 @@ may,45000,60000</pre
                 data: [["Household", 20000], ["Jewel", 10000]]
               }
             ]
-          }
-        });
-        var myChart2 = Highcharts.chart("container5", {
-          chart: {
-            type: "column"
-          },
-          title: {
-            text: "Year Income and Expenditure"
-          },
-          subtitle: {
-            text: "Myself"
-          },
-          xAxis: {
-            title: {
-              text: "Months"
-            }
-          },
-          yAxis: {
-            min: 0,
-            title: {
-              text: "Amount (Rs)"
-            }
-          },
-          tooltip: {
-            headerFormat:
-              '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat:
-              '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-            footerFormat: "</table>",
-            shared: true,
-            useHTML: true
-          },
-          data: {
-            rows: csv.data
           }
         });
       });
