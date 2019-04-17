@@ -30,7 +30,7 @@ may,45000,60000</pre
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         var csv = Papa.parse(document.getElementById("csv").innerHTML);
-        var myChart = Highcharts.chart("container", {
+        var myChart1 = Highcharts.chart("container", {
           chart: {
             type: "column"
           },
@@ -78,17 +78,18 @@ may,45000,60000</pre
           series: [
             {
               name: "Income",
-              colorByPoint: true,
 
               data: [
                 {
                   name: "Jan Income",
                   y: 50000,
+                  colorByPoint: true,
                   drilldown: "Jan Income"
                 },
                 {
                   name: "Feb Income",
                   y: 60000,
+                  colorByPoint: true,
                   drilldown: "Feb Income"
                 }
               ]
@@ -135,9 +136,9 @@ may,45000,60000</pre
             ]
           }
         });
-        var myChart = Highcharts.chart("container5", {
+        var myChart2 = Highcharts.chart("container5", {
           chart: {
-            type: "line"
+            type: "column"
           },
           title: {
             text: "Year Income and Expenditure"
@@ -146,8 +147,6 @@ may,45000,60000</pre
             text: "Myself"
           },
           xAxis: {
-            categories: ["Jan", "Feb"],
-
             title: {
               text: "Months"
             }
